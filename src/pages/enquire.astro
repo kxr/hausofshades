@@ -1,0 +1,96 @@
+---
+import Base from '../layouts/Base.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import { site } from '../site.config';
+---
+
+<Base
+  title="Send an enquiry"
+  description="Enquire about bridal hair and makeup, creative shoots, agency and runway teams, or studio appointments at Haus of Shades Studio."
+  current="enquire"
+>
+  <section class="band ground-porcelain enquire">
+    <div class="wrap enquire__grid">
+      <div class="enquire__intro">
+        <h1 class="display">Send an enquiry</h1>
+        <p class="lede">
+          For weddings, shoots, agency bookings or anything you’d like to talk through first. The team will reply
+          by email or phone.
+        </p>
+      </div>
+
+      <div class="enquire__form">
+        <EnquiryForm />
+      </div>
+
+      <aside class="enquire__direct" aria-labelledby="direct-title">
+        <h2 id="direct-title">Prefer to call or message?</h2>
+        <dl>
+          <div>
+            <dt>Phone</dt>
+            <dd><a href={site.phoneHref}>{site.phone}</a></dd>
+          </div>
+          <div>
+            <dt>Email</dt>
+            <dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
+          </div>
+          <div>
+            <dt>Instagram</dt>
+            <dd>
+              <a href={site.instagram} target="_blank" rel="noopener">
+                {site.instagramHandle}<span class="visually-hidden"> (opens in a new tab)</span>
+              </a>
+            </dd>
+          </div>
+        </dl>
+        <p class="enquire__book">
+          Booking a cut, colour or makeup appointment? Pick a time on <a
+            href={site.fresha}
+            target="_blank"
+            rel="noopener">Fresha<span class="visually-hidden"> (opens in a new tab)</span></a
+          >.
+        </p>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .enquire__grid {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 3.5rem);
+  }
+  .enquire__intro .lede { margin-top: 1.25rem; }
+  @media (min-width: 60em) {
+    .enquire__grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      align-items: start;
+    }
+    .enquire__intro { grid-column: 1 / span 7; }
+    .enquire__form { grid-column: 1 / span 7; }
+    .enquire__direct {
+      grid-column: 9 / -1;
+      grid-row: 1 / span 2;
+      position: sticky;
+      top: calc(var(--header-h) + 2rem);
+      margin-top: 1rem;
+    }
+  }
+  .enquire__direct {
+    padding: clamp(1.5rem, 4vw, 2.25rem);
+    border-radius: 1.5rem;
+    background: var(--sand);
+  }
+  .enquire__direct h2 { font-size: var(--step-2); margin-bottom: 1.25rem; }
+  .enquire__direct dl { border-top: 1px solid var(--rule); }
+  .enquire__direct dl div {
+    display: grid;
+    grid-template-columns: 5rem minmax(0, 1fr);
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .enquire__direct dt { color: var(--plum-soft); }
+  .enquire__direct dd { overflow-wrap: anywhere; }
+  .enquire__book { margin-top: 1.25rem; font-size: 0.9375rem; }
+</style>

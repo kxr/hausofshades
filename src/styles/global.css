@@ -1,0 +1,238 @@
+/* Haus of Shades Studio. Brand fonts: SIL Open Font License 1.1 (see src/assets/fonts). */
+@font-face {
+  font-family: "Belleza";
+  src: url("../assets/fonts/belleza-latin.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Jost";
+  src: url("../assets/fonts/jost-latin-var.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Brand palette */
+  --plum: #4b1e32;
+  --deep-plum: #2a1119;
+  --sand: #eadbc8;
+  --blush: #e6b5ba;
+  --mauve: #a7918a;
+  --porcelain: #f8f1ee;
+  --plum-soft: #6e4a59; /* secondary text on porcelain and sand only */
+  --error: #9b1c3a;
+
+  --font-display: "Belleza", "Tenor Sans", "Gill Sans", sans-serif;
+  --font-body: "Jost", Futura, "Helvetica Neue", Arial, sans-serif;
+
+  /* Type scale, major third (brand) */
+  --step--1: 0.8rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.5625rem;
+  --step-3: 1.953rem;
+  --step-4: 2.441rem;
+  --step-5: 3.052rem;
+  --step-6: 3.815rem;
+  --step-7: 4.768rem;
+
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+  --band: clamp(4.5rem, 10vw, 8.5rem);
+  --gap: clamp(0.75rem, 1.6vw, 1.25rem);
+  --measure: 34rem;
+  --header-h: 4rem;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@media (min-width: 60em) {
+  :root { --header-h: 4.75rem; }
+}
+
+/* Grounds: each sets the colours its children draw from. */
+.ground-plum, .ground-deep {
+  --ink: var(--porcelain);
+  --ink-soft: var(--sand);
+  --rule: rgb(234 219 200 / 0.32);
+  --btn-bg: var(--sand);
+  --btn-ink: var(--deep-plum);
+  --ring: var(--sand);
+  --tag-bg: var(--porcelain);
+  --tag-ink: var(--deep-plum);
+}
+.ground-plum { --bg: var(--plum); }
+.ground-deep { --bg: var(--deep-plum); }
+.ground-mauve {
+  --bg: var(--mauve);
+  --ink: var(--deep-plum);
+  --ink-soft: var(--deep-plum);
+  --rule: rgb(42 17 25 / 0.35);
+  --btn-bg: var(--deep-plum);
+  --btn-ink: var(--porcelain);
+  --ring: var(--deep-plum);
+}
+.ground-blush {
+  --bg: var(--blush);
+  --ink: var(--plum);
+  --ink-soft: var(--plum);
+  --rule: rgb(75 30 50 / 0.3);
+  --btn-bg: var(--plum);
+  --btn-ink: var(--porcelain);
+  --ring: var(--plum);
+}
+.ground-sand, .ground-porcelain {
+  --ink: var(--plum);
+  --ink-soft: var(--plum-soft);
+  --rule: rgb(75 30 50 / 0.22);
+  --btn-bg: var(--plum);
+  --btn-ink: var(--porcelain);
+  --ring: var(--plum);
+}
+.ground-sand { --bg: var(--sand); }
+.ground-porcelain { --bg: var(--porcelain); }
+.ground-mauve, .ground-blush, .ground-sand, .ground-porcelain {
+  --tag-bg: var(--porcelain);
+  --tag-ink: var(--plum);
+}
+[class*="ground-"] {
+  background-color: var(--bg);
+  color: var(--ink);
+}
+
+/* Base */
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-h) + 1rem);
+}
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--plum);
+  background: var(--porcelain);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+img, svg { display: block; max-width: 100%; }
+img { height: auto; }
+h1, h2, h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+}
+p, ul, ol, dl, dd, figure { margin: 0; }
+p { text-wrap: pretty; }
+ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.22em; }
+button, input, textarea, select { font: inherit; color: inherit; }
+:focus-visible {
+  outline: 2px solid var(--ink, var(--plum));
+  outline-offset: 3px;
+}
+::selection { background: var(--blush); color: var(--deep-plum); }
+
+/* Layout */
+.wrap {
+  width: 100%;
+  max-width: 86rem;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.band { padding-block: var(--band); }
+
+/* Type */
+.display {
+  font-family: var(--font-display);
+  font-size: clamp(var(--step-4), 1.6rem + 3.2vw, var(--step-6));
+  line-height: 1.04;
+}
+.lede {
+  font-size: clamp(var(--step-0), 0.95rem + 0.4vw, var(--step-1));
+  line-height: 1.55;
+  max-width: var(--measure);
+}
+.soft { color: var(--ink-soft); }
+.text-link {
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  transition: text-decoration-color 0.2s;
+}
+.text-link:hover { text-decoration-color: currentColor; }
+
+/* Buttons: pill-shaped, like the pans they sit beside. */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.7rem 1.6rem;
+  border: 1px solid var(--btn-bg);
+  border-radius: 999px;
+  background: var(--btn-bg);
+  color: var(--btn-ink);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+.btn:hover { background: transparent; color: var(--ink); }
+.btn--line {
+  border-color: currentColor;
+  background: transparent;
+  color: var(--ink);
+}
+.btn--line:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.btn--small { min-height: 2.5rem; padding: 0.45rem 1.15rem; font-size: 0.9375rem; }
+.btn[disabled] { opacity: 0.6; cursor: progress; }
+
+/* Utilities */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 50;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  background: var(--sand);
+  color: var(--deep-plum);
+  font-weight: 500;
+}
+.skip-link:focus { top: 0.75rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

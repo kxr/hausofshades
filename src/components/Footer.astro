@@ -1,0 +1,109 @@
+---
+import Icon from '../assets/logo/haus-of-shades-icon-on-dark.svg';
+import { site } from '../site.config';
+import { url } from '../lib/paths';
+
+const year = new Date().getFullYear();
+const details = [
+  { term: 'Studio', detail: `${site.locality} ${site.region} ${site.postcode}, by appointment` },
+  { term: 'Travel', detail: `Anywhere in ${site.serviceArea} for weddings, events and shoots` },
+  ...(site.hours ? [{ term: 'Hours', detail: site.hours }] : []),
+];
+---
+
+<footer class="site-footer ground-deep" id="contact">
+  <div class="wrap site-footer__grid">
+    <div class="site-footer__intro">
+      <Icon class="site-footer__icon" aria-hidden="true" focusable="false" />
+      <h2 class="site-footer__title">Book or get in touch</h2>
+      <p class="soft">
+        Book hair and makeup appointments on Fresha. For weddings, shoots and agency work, send an enquiry.
+      </p>
+      <div class="actions">
+        <a class="btn" href={site.fresha} target="_blank" rel="noopener">
+          Book now<span class="visually-hidden"> on Fresha (opens in a new tab)</span>
+        </a>
+        <a class="btn btn--line" href={url('enquire/')}>Send an enquiry</a>
+      </div>
+    </div>
+
+    <dl class="site-footer__details">
+      {
+        details.map((d) => (
+          <div>
+            <dt>{d.term}</dt>
+            <dd>{d.detail}</dd>
+          </div>
+        ))
+      }
+      <div>
+        <dt>Phone</dt>
+        <dd><a href={site.phoneHref}>{site.phone}</a></dd>
+      </div>
+      <div>
+        <dt>Email</dt>
+        <dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
+      </div>
+      <div>
+        <dt>Instagram</dt>
+        <dd><a href={site.instagram} target="_blank" rel="noopener">{site.instagramHandle}</a></dd>
+      </div>
+    </dl>
+  </div>
+  <div class="wrap site-footer__base">
+    <p>© {year} {site.name}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-top: var(--band);
+    border-top: 1px solid rgb(234 219 200 / 0.14);
+  }
+  .site-footer__grid {
+    display: grid;
+    gap: 3rem;
+  }
+  @media (min-width: 60em) {
+    .site-footer__grid {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+      gap: 4rem clamp(3rem, 8vw, 8rem);
+      align-items: end;
+    }
+  }
+  .site-footer__intro {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+    max-width: 34rem;
+  }
+  .site-footer__intro .actions { margin-top: 0.5rem; }
+  .site-footer__icon {
+    width: 4.5rem;
+    height: auto;
+    margin-left: -0.6rem;
+  }
+  .site-footer__title { font-size: clamp(var(--step-3), 1.4rem + 1.8vw, var(--step-5)); }
+
+  .site-footer__details {
+    display: grid;
+    border-top: 1px solid var(--rule);
+  }
+  .site-footer__details div {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: 1rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .site-footer__details dt { color: var(--sand); }
+  .site-footer__details dd { overflow-wrap: anywhere; }
+  .site-footer__details a { text-decoration-color: var(--rule); }
+  .site-footer__details a:hover { text-decoration-color: currentColor; }
+
+  .site-footer__base {
+    padding-block: var(--band) 2rem;
+    color: var(--sand);
+    font-size: 0.875rem;
+  }
+</style>

@@ -1,0 +1,195 @@
+---
+// The icon and wordmark, each cropped to its artwork and sized separately so the
+// name stays readable. The icon file adds a hairline stroke so its fine lines hold
+// at header size. Phones show the wordmark only: the icon would be too small there.
+import Icon from '../assets/logo/haus-of-shades-icon-on-dark-small.svg';
+import Wordmark from '../assets/logo/haus-of-shades-wordmark-on-dark-cropped.svg';
+import { site } from '../site.config';
+import { studios } from '../data/studios';
+import { url } from '../lib/paths';
+
+interface Props {
+  current?: string;
+}
+const { current } = Astro.props;
+
+const links = [
+  ...studios.map((s) => ({ key: s.slug, href: url(`${s.slug}/`), label: s.name.replace(' Studio', '') })),
+  { key: 'enquire', href: url('enquire/'), label: 'Enquire' },
+];
+---
+
+<header class="site-header ground-plum">
+  <div class="site-header__bar wrap">
+    <a class="site-header__logo" href={url('')} aria-label={`${site.name}, home`}>
+      <Icon class="site-header__icon" aria-hidden="true" focusable="false" />
+      <Wordmark class="site-header__wordmark" aria-hidden="true" focusable="false" />
+    </a>
+
+    <nav class="site-nav" aria-label="Main">
+      <button class="site-nav__toggle" type="button" aria-expanded="false" aria-controls="site-menu">
+        <span class="site-nav__bars" aria-hidden="true"></span>
+        <span class="visually-hidden">Menu</span>
+      </button>
+      <ul class="site-nav__list" id="site-menu" role="list">
+        {
+          links.map((link) => (
+            <li>
+              <a href={link.href} aria-current={current === link.key ? 'page' : undefined}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a class="btn btn--small site-header__book" href={site.fresha} target="_blank" rel="noopener">
+      Book now<span class="visually-hidden"> on Fresha (opens in a new tab)</span>
+    </a>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.site-nav__toggle');
+  const menu = document.getElementById('site-menu');
+  if (toggle && menu) {
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      document.documentElement.toggleAttribute('data-menu-open', open);
+    };
+    toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+    matchMedia('(min-width: 60em)').addEventListener('change', () => setOpen(false));
+  }
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    border-bottom: 1px solid rgb(234 219 200 / 0.14);
+  }
+  .site-header__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: var(--header-h);
+  }
+  .site-header__logo {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.35rem 0;
+    border-radius: 0.25rem;
+  }
+  .site-header__logo svg {
+    width: auto;
+    overflow: visible;
+    shape-rendering: geometricPrecision;
+  }
+  .site-header__wordmark { display: block; height: clamp(1.55rem, 7.4vw, 1.9rem); }
+  .site-header__icon { display: none; }
+  @media (min-width: 36em) {
+    .site-header__icon { display: block; height: 3.1rem; }
+    .site-header__wordmark { height: 2.1rem; }
+  }
+  @media (min-width: 60em) {
+    .site-header__bar { gap: 0.75rem; }
+    .site-header__logo { gap: 1rem; }
+    .site-header__icon { height: 3.6rem; }
+    .site-header__wordmark { height: 2.6rem; }
+  }
+  .site-header__book { white-space: nowrap; }
+  @media (max-width: 24em) {
+    .site-header__book { padding-inline: 0.9rem; }
+  }
+
+  .site-nav { margin-left: auto; }
+  .site-nav__toggle {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: var(--porcelain);
+    cursor: pointer;
+  }
+  .site-nav__bars,
+  .site-nav__bars::before {
+    display: block;
+    width: 1.35rem;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform 0.25s var(--ease-out);
+  }
+  .site-nav__bars { position: relative; translate: 0 -3.5px; }
+  .site-nav__bars::before { content: ""; position: absolute; top: 7px; }
+  :global(html[data-menu-open]) .site-nav__bars { transform: translateY(3.5px) rotate(45deg); }
+  :global(html[data-menu-open]) .site-nav__bars::before { transform: translateY(-7px) rotate(-90deg); }
+
+  .site-nav__list {
+    display: none;
+    margin: 0;
+  }
+  :global(html[data-menu-open]) .site-nav__list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: grid;
+    gap: 0.1rem;
+    padding: 0.75rem var(--gutter) 1.75rem;
+    background: var(--plum);
+    border-bottom: 1px solid rgb(234 219 200 / 0.14);
+  }
+  .site-nav__list a {
+    display: block;
+    padding: 0.55rem 0;
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    line-height: 1.2;
+    text-decoration: none;
+  }
+  .site-nav__list a[aria-current="page"] {
+    text-decoration: underline;
+    text-decoration-color: var(--blush);
+    text-underline-offset: 0.25em;
+  }
+
+  @media (min-width: 60em) {
+    .site-nav__toggle { display: none; }
+    .site-nav__list,
+    :global(html[data-menu-open]) .site-nav__list {
+      position: static;
+      display: flex;
+      gap: clamp(1.25rem, 2.2vw, 2.25rem);
+      padding: 0;
+      background: none;
+      border: 0;
+    }
+    .site-nav__list a {
+      padding: 0.5rem 0;
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+    .site-nav__list a:hover {
+      text-decoration: underline;
+      text-decoration-color: var(--blush);
+      text-underline-offset: 0.35em;
+    }
+    .site-header__book { margin-left: clamp(0.5rem, 2vw, 1.75rem); }
+  }
+</style>

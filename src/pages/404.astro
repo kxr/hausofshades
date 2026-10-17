@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../site.config';
+import { url } from '../lib/paths';
+---
+
+<Base title="Page not found" description="This page isn’t on the Haus of Shades Studio website.">
+  <section class="band ground-plum missing">
+    <div class="wrap">
+      <h1 class="display">This page isn’t here</h1>
+      <p class="lede">The link may be out of date. Start from the home page, or book an appointment on Fresha.</p>
+      <div class="actions">
+        <a class="btn" href={url('')}>Go to the home page</a>
+        <a class="btn btn--line" href={site.fresha} target="_blank" rel="noopener">
+          Book on Fresha<span class="visually-hidden"> (opens in a new tab)</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .missing { min-height: 60vh; }
+  .missing .lede { margin-top: 1.25rem; color: var(--sand); }
+  .missing .actions { margin-top: 2rem; }
+</style>

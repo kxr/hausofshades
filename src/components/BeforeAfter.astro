@@ -1,0 +1,46 @@
+---
+// A side-by-side before/after photo, tagged on each half.
+import Photo from './Photo.astro';
+import type { Photo as PhotoData } from '../lib/photos';
+
+interface Props {
+  photo: PhotoData;
+  sizes: string;
+  caption?: string;
+  class?: string;
+}
+const { photo, sizes, caption, class: className } = Astro.props;
+---
+
+<figure class:list={['ba', className]}>
+  <div class="ba__frame">
+    <Photo photo={photo} sizes={sizes} />
+    <span class="ba__tag ba__tag--before" aria-hidden="true">Before</span>
+    <span class="ba__tag ba__tag--after" aria-hidden="true">After</span>
+  </div>
+  {caption && <figcaption class="ba__caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  .ba__frame { position: relative; }
+  .ba__tag {
+    position: absolute;
+    bottom: 0.75rem;
+    translate: -50% 0;
+    padding: 0.2rem 0.7rem;
+    border-radius: 999px;
+    background: var(--tag-bg, var(--porcelain));
+    color: var(--tag-ink, var(--plum));
+    font-size: var(--step--1);
+    font-weight: 500;
+    line-height: 1.5;
+    pointer-events: none;
+  }
+  .ba__tag--before { left: 25%; }
+  .ba__tag--after { left: 75%; }
+  .ba__caption {
+    margin-top: 0.75rem;
+    font-size: 0.9375rem;
+    color: var(--ink-soft);
+  }
+</style>

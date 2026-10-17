@@ -1,0 +1,24 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+
+# environment
+.env
+.env.*
+
+# macOS
+.DS_Store
+
+# Original full-size photos. The site uses the optimised copies in
+# src/assets/work (see scripts/prepare-photos.sh).
+/media/
+
+# Claude stuff
+.claude
+README.md.AI

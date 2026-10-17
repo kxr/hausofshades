@@ -1,0 +1,52 @@
+---
+// A portfolio photo. With `zoom`, it links to a large copy that the lightbox
+// opens in place (or the browser opens directly without JavaScript).
+import { Image, getImage } from 'astro:assets';
+import type { Photo } from '../lib/photos';
+
+interface Props {
+  photo: Photo;
+  sizes: string;
+  zoom?: boolean;
+  /** Crop to the container instead of keeping the photo's own shape. */
+  cover?: boolean;
+  loading?: 'lazy' | 'eager';
+  class?: string;
+}
+
+const { photo, sizes, zoom = true, cover = false, loading = 'lazy', class: className } = Astro.props;
+const widths = [360, 540, 720, 960, 1280, 1600].filter((w) => w <= photo.src.width);
+const large = zoom ? await getImage({ src: photo.src, width: Math.min(1800, photo.src.width), format: 'webp' }) : null;
+const style = cover ? `object-position: ${photo.focus}` : undefined;
+---
+
+{
+  large ? (
+    <a class:list={['photo', { 'photo--cover': cover }, className]} href={large.src} data-zoom>
+      <Image src={photo.src} alt={photo.alt} widths={widths} sizes={sizes} loading={loading} style={style} />
+    </a>
+  ) : (
+    <span class:list={['photo', { 'photo--cover': cover }, className]}>
+      <Image src={photo.src} alt={photo.alt} widths={widths} sizes={sizes} loading={loading} style={style} />
+    </span>
+  )
+}
+
+<style>
+  .photo {
+    display: block;
+    overflow: hidden;
+    border-radius: 2px;
+    background: rgb(42 17 25 / 0.12);
+  }
+  .photo img {
+    width: 100%;
+    transition: opacity 0.25s;
+  }
+  a.photo { cursor: zoom-in; }
+  a.photo:hover img { opacity: 0.92; }
+  .photo--cover img {
+    height: 100%;
+    object-fit: cover;
+  }
+</style>

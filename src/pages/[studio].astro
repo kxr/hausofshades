@@ -1,0 +1,360 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../layouts/Base.astro';
+import Pan from '../components/Pan.astro';
+import Photo from '../components/Photo.astro';
+import BeforeAfter from '../components/BeforeAfter.astro';
+import { studios, callSheet, type Studio } from '../data/studios';
+import { photo, photosIn } from '../lib/photos';
+import { site } from '../site.config';
+import { url } from '../lib/paths';
+
+export const getStaticPaths = (() =>
+  studios.map((studio, i) => ({
+    params: { studio: studio.slug },
+    props: { studio, next: studios[(i + 1) % studios.length] },
+  }))) satisfies GetStaticPaths;
+
+interface Props {
+  studio: Studio;
+  next: Studio;
+}
+const { studio, next } = Astro.props;
+
+const beforeAfter = studio.slug === 'hair' ? ['hair/03-smoothing-before-after', 'hair/05-curls-to-sleek'] : [];
+const gallery = photosIn(studio.slug, beforeAfter);
+const onSet = studio.slug === 'creative' ? photosIn('on-set') : [];
+const enquireHref = url(`enquire/?for=${studio.slug}`);
+---
+
+<Base title={studio.name} description={studio.description} current={studio.slug}>
+  <section class={`studio-hero ground-${studio.shade}`}>
+    <div class="wrap studio-hero__grid">
+      <h1 class="studio-hero__title">{studio.name}</h1>
+      <Pan
+        class="studio-hero__pan"
+        photo={photo(studio.pan)}
+        alt={photo(studio.pan).alt}
+        loading="eager"
+        sizes="(min-width: 60em) 30vw, 34vw"
+      />
+      <div class="studio-hero__text">
+        <p class="lede">{studio.intro}</p>
+        <div class="actions">
+          {
+            studio.bookable && (
+              <a class="btn" href={site.fresha} target="_blank" rel="noopener">
+                Book on Fresha<span class="visually-hidden"> (opens in a new tab)</span>
+              </a>
+            )
+          }
+          <a class:list={['btn', { 'btn--line': studio.bookable }]} href={enquireHref}>{studio.enquiryLabel}</a>
+        </div>
+      </div>
+      <div class="studio-hero__services">
+        <h2 class="services__title">In the {studio.name}</h2>
+        <ul class="services" role="list">
+          {studio.services.map((service) => <li>{service}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {
+    beforeAfter.length > 0 && (
+      <section class={`band ground-${studio.shade} studio-feature`} aria-labelledby="results-title">
+        <div class="wrap">
+          <h2 class="section-title" id="results-title">Before and after</h2>
+          <div class="results" data-zoom-group>
+            <BeforeAfter
+              photo={photo(beforeAfter[0])}
+              sizes="(min-width: 48em) 50vw, 100vw"
+              caption="Smoothing treatment"
+            />
+            <BeforeAfter photo={photo(beforeAfter[1])} sizes="(min-width: 48em) 32vw, 100vw" caption="Curls to sleek" />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    studio.slug === 'bridal' && (
+      <section class={`band ground-${studio.shade} studio-feature`} aria-labelledby="how-title">
+        <div class="wrap how">
+          <h2 class="section-title" id="how-title">How bridal bookings work</h2>
+          <ol class="how__steps" role="list">
+            <li>
+              <h3>Enquire</h3>
+              <p>Send your date, venue and how many people need hair and makeup.</p>
+            </li>
+            <li>
+              <h3>Trial</h3>
+              <p>
+                Try your hair and makeup at the Doreen studio. Bring photos of looks you love and any
+                accessories you’ll wear.
+              </p>
+            </li>
+            <li>
+              <h3>Wedding day</h3>
+              <p>The team comes to your venue or home, anywhere in Victoria, and gets everyone ready.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+    )
+  }
+
+  <section class={`band ground-${studio.shade} studio-work`} aria-labelledby="work-title">
+    <div class="wrap">
+      <h2 class="section-title" id="work-title">Recent work</h2>
+      <ul class:list={['gallery', { 'gallery--few': gallery.length < 5 }]} role="list" data-zoom-group>
+        {
+          gallery.map((p) => (
+            <li>
+              <Photo photo={p} sizes="(min-width: 60em) 30vw, (min-width: 36em) 45vw, 46vw" />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  {
+    onSet.length > 0 && (
+      <section class="band ground-plum" id="on-set" aria-labelledby="on-set-title">
+        <div class="wrap on-set">
+          <div class="on-set__text">
+            <h2 class="section-title" id="on-set-title">On-set teams for agencies and fashion houses</h2>
+            <p class="lede">
+              Hair and makeup teams for creative shoots, campaigns and runway productions, from a single artist
+              to a full crew backstage.
+            </p>
+            <div class="actions">
+              <a class="btn" href={url('enquire/?for=agency')}>Agency enquiries</a>
+            </div>
+          </div>
+          <div class="on-set__sheet">
+            <h3>What to send with your enquiry</h3>
+            <dl class="call-sheet">
+              {callSheet.map((row) => (
+                <div>
+                  <dt>{row.term}</dt>
+                  <dd>{row.detail}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+          <ul class="gallery on-set__gallery" role="list" data-zoom-group>
+            {onSet.map((p) => (
+              <li>
+                <Photo photo={p} sizes="(min-width: 60em) 30vw, (min-width: 36em) 45vw, 46vw" />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <section class={`band ground-${studio.shade} studio-close`} aria-labelledby="close-title">
+    <div class="wrap studio-close__grid">
+      <div>
+        <h2 class="section-title" id="close-title">{studio.close.title}</h2>
+        <p class="studio-close__copy">{studio.close.copy}</p>
+        <div class="actions">
+          {
+            studio.bookable && (
+              <a class="btn" href={site.fresha} target="_blank" rel="noopener">
+                Book on Fresha<span class="visually-hidden"> (opens in a new tab)</span>
+              </a>
+            )
+          }
+          <a class:list={['btn', { 'btn--line': studio.bookable }]} href={enquireHref}>{studio.enquiryLabel}</a>
+        </div>
+      </div>
+      <a class={`next ground-${next.shade}`} href={url(`${next.slug}/`)}>
+        <Pan class="next__pan" photo={photo(next.pan)} sizes="6rem" />
+        <span class="next__text">
+          <span class="next__label">Next studio</span>
+          <span class="next__name">{next.name}</span>
+        </span>
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Header: the studio name set large, with its pan beside it. */
+  .studio-hero { padding-block: clamp(2.5rem, 7vw, 6rem) clamp(3rem, 7vw, 5.5rem); }
+  .studio-hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(7.5rem, 34vw, 11rem);
+    grid-template-areas:
+      "title pan"
+      "text text"
+      "services services";
+    align-items: center;
+    gap: clamp(1.75rem, 5vw, 2.5rem) clamp(1rem, 4vw, 2rem);
+  }
+  .studio-hero__title {
+    grid-area: title;
+    font-size: clamp(3rem, 1.4rem + 7.6vw, 9.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.005em;
+    text-wrap: balance;
+  }
+  .studio-hero :global(.studio-hero__pan) { grid-area: pan; }
+  .studio-hero__text { grid-area: text; }
+  .studio-hero__text .actions { margin-top: 1.75rem; }
+  .studio-hero__services { grid-area: services; }
+  .services__title {
+    margin-bottom: 0.75rem;
+    font-family: var(--font-body);
+    font-size: var(--step-0);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+  .services {
+    display: grid;
+    border-top: 1px solid var(--rule);
+  }
+  .services li {
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  @media (min-width: 40em) {
+    .services { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 2rem; }
+  }
+  @media (min-width: 60em) {
+    .studio-hero__grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      grid-template-areas: none;
+      align-items: start;
+      row-gap: 3.5rem;
+    }
+    .studio-hero__title { grid-column: 1 / span 8; grid-row: 1; align-self: center; }
+    .studio-hero :global(.studio-hero__pan) { grid-column: 9 / -1; grid-row: 1 / span 2; }
+    .studio-hero__text { grid-column: 1 / span 5; grid-row: 2; }
+    .studio-hero__services { grid-column: 1 / span 7; grid-row: 3; }
+    .services { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  .section-title {
+    font-size: clamp(var(--step-3), 1.4rem + 2vw, var(--step-5));
+    margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
+    max-width: 22ch;
+  }
+  .studio-feature, .studio-work { padding-top: 0; }
+
+  /* Hair results */
+  .results {
+    display: grid;
+    gap: var(--gap);
+  }
+  @media (min-width: 48em) {
+    .results {
+      grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+
+  /* Bridal steps */
+  .how__steps {
+    display: grid;
+    gap: 2rem;
+    counter-reset: step;
+  }
+  .how__steps li {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    counter-increment: step;
+  }
+  .how__steps li::before {
+    content: counter(step);
+    display: block;
+    margin-bottom: 0.75rem;
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    line-height: 1;
+  }
+  .how__steps h3 { font-size: var(--step-2); margin-bottom: 0.5rem; }
+  .how__steps p { max-width: 30rem; color: var(--ink-soft); }
+  @media (min-width: 48em) {
+    .how__steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.5rem, 3vw, 3rem); }
+  }
+
+  /* Gallery: a masonry of columns that keeps each photo's own shape. */
+  .gallery {
+    columns: 2;
+    column-gap: var(--gap);
+  }
+  .gallery li {
+    break-inside: avoid;
+    margin-bottom: var(--gap);
+  }
+  @media (min-width: 60em) {
+    .gallery { columns: 3; }
+  }
+  .gallery--few { columns: 1; }
+  @media (min-width: 36em) {
+    .gallery--few { columns: 2; }
+  }
+  @media (min-width: 60em) {
+    .gallery--few { columns: 3; }
+  }
+
+  /* On set (Creative Studio) */
+  .on-set {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 3.5rem) var(--gap);
+  }
+  .on-set .lede + .actions { margin-top: 1.75rem; }
+  .on-set__sheet h3 { font-size: var(--step-1); margin-bottom: 1rem; }
+  .call-sheet { border-top: 1px solid var(--rule); }
+  .call-sheet div {
+    display: grid;
+    gap: 0.15rem 1.5rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .call-sheet dt { font-weight: 500; }
+  .call-sheet dd { color: var(--ink-soft); }
+  @media (min-width: 40em) {
+    .call-sheet div { grid-template-columns: 11rem minmax(0, 1fr); }
+  }
+  @media (min-width: 60em) {
+    .on-set { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+    .on-set__text { grid-column: 1 / span 6; }
+    .on-set__sheet { grid-column: 8 / -1; align-self: end; }
+    .on-set__gallery { grid-column: 1 / -1; }
+  }
+
+  /* Closing band */
+  .studio-close { border-top: 1px solid var(--rule); }
+  .studio-close__grid {
+    display: grid;
+    gap: 3rem;
+    align-items: end;
+  }
+  .studio-close__copy { max-width: 30rem; margin-top: -0.75rem; }
+  .studio-close__copy + .actions { margin-top: 1.75rem; }
+  @media (min-width: 48em) {
+    .studio-close__grid { grid-template-columns: minmax(0, 1fr) auto; }
+  }
+  .next {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.1rem;
+    justify-self: start;
+    padding: 0.6rem 1.75rem 0.6rem 0.6rem;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: transform 0.3s var(--ease-out);
+  }
+  .next :global(.next__pan) { width: 5.5rem; }
+  .next__text { display: grid; }
+  .next__label { font-size: 0.875rem; color: var(--ink-soft); }
+  .next__name { font-family: var(--font-display); font-size: var(--step-2); line-height: 1.2; }
+  .next:hover :global(.pan__photo) { transform: scale(1.06); }
+</style>
