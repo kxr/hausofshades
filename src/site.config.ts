@@ -15,7 +15,7 @@ export const site = {
   hours: 'Open 7 days, 10am to 9pm',
   openingHoursSchema: 'Mo-Su 10:00-21:00',
 
-  instagram: 'https://www.instagram.com/haus_of_shades_studio/',
+  instagram: 'https://www.instagram.com/hausofshades.saba/',
   instagramHandle: '@haus_of_shades_studio',
   fresha: 'https://www.fresha.com/a/haus-of-shades-studio-melbourne-13-glass-crescent-ej6u9r1v',
 
