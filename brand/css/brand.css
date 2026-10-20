@@ -15,10 +15,10 @@
 :root {
   /* colour */
   --hos-plum: #4B1E32;        /* primary: logo, headings, body text on light */
-  --hos-deep-plum: #2A1119;   /* dark backgrounds, footers */
-  --hos-sand: #EADBC8;        /* accent: logo pan, highlights, buttons on plum */
-  --hos-blush: #E6B5BA;       /* secondary accent: soft panels, tags */
-  --hos-mauve: #A7918A;       /* photo backdrops, quiet sections (plum text only) */
+  --hos-deep-plum: #2A1119;   /* logo lowlight strand, dark backgrounds, footers */
+  --hos-sand: #EADBC8;        /* accent: logo strand on dark, highlights, buttons on plum */
+  --hos-blush: #E6B5BA;       /* secondary accent: logo highlight strands, soft panels, tags */
+  --hos-mauve: #A7918A;       /* logo strands, photo backdrops, quiet sections (plum text only) */
   --hos-porcelain: #F8F1EE;   /* page background, text on plum */
 
   /* type */
@@ -39,7 +39,7 @@ body { font-family: var(--hos-font-body); color: var(--hos-plum); background: va
 h1, h2, h3, h4 { font-family: var(--hos-font-heading); font-weight: 400; letter-spacing: 0.02em; }
 
 /* Logo: <a href="/" class="hos-logo"><img src="/logo/haus-of-shades-horizontal-on-light.svg"
-   alt="Haus of Shades Studio" width="320" height="129"></a>
+   alt="Haus of Shades Studio" width="320" height="166"></a>
    Use the -on-dark file on dark headers. Only wrap it in a <picture> with a
    (prefers-color-scheme: dark) source if the site itself switches to a dark background. */
 .hos-logo img { display: block; height: auto; max-width: 100%; }

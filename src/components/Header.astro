@@ -1,8 +1,7 @@
 ---
 // The icon and wordmark, each cropped to its artwork and sized separately so the
-// name stays readable. The icon file adds a hairline stroke so its fine lines hold
-// at header size. Phones show the wordmark only: the icon would be too small there.
-import Icon from '../assets/logo/haus-of-shades-icon-on-dark-small.svg';
+// name stays readable at every width.
+import Icon from '../assets/logo/haus-of-shades-icon-on-dark-cropped.svg';
 import Wordmark from '../assets/logo/haus-of-shades-wordmark-on-dark-cropped.svg';
 import { site } from '../site.config';
 import { studios } from '../data/studios';
@@ -86,7 +85,7 @@ const links = [
     display: flex;
     flex: none;
     align-items: center;
-    gap: 0.85rem;
+    gap: clamp(0.45rem, 2vw, 0.85rem);
     padding: 0.35rem 0;
     border-radius: 0.25rem;
   }
@@ -95,10 +94,11 @@ const links = [
     overflow: visible;
     shape-rendering: geometricPrecision;
   }
-  .site-header__wordmark { display: block; height: clamp(1.55rem, 7.4vw, 1.9rem); }
-  .site-header__icon { display: none; }
+  /* Phones: sized to the screen so the logo, menu and Book now share one row. */
+  .site-header__icon { display: block; height: clamp(1.75rem, 8.2vw, 2.25rem); }
+  .site-header__wordmark { display: block; height: clamp(1.45rem, 6.6vw, 1.9rem); }
   @media (min-width: 36em) {
-    .site-header__icon { display: block; height: 3.1rem; }
+    .site-header__icon { height: 3.1rem; }
     .site-header__wordmark { height: 2.1rem; }
   }
   @media (min-width: 60em) {
