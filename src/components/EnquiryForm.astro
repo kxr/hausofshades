@@ -1,6 +1,7 @@
 ---
-// Sends to site.formEndpoint when set (Formspree-style JSON response).
-// Without an endpoint it opens the visitor's email app with the enquiry written out.
+// Saves each enquiry as a response to the Formbricks survey in site.formbricks.
+// Until that's set up (and without JavaScript), it opens the visitor's email app
+// with the enquiry written out instead.
 import { site } from '../site.config';
 import { url } from '../lib/paths';
 
@@ -12,15 +13,19 @@ const types = [
   { value: 'beauty', label: 'Beauty and makeup' },
 ];
 
-const endpoint = site.formEndpoint;
+const { appUrl, workspaceId, surveyId, questionIds } = site.formbricks;
+const endpoint =
+  workspaceId && surveyId ? `${appUrl.replace(/\/$/, '')}/api/v1/client/${workspaceId}/responses` : '';
 ---
 
 <form
   class="enquiry"
   method="post"
-  action={endpoint || `mailto:${site.email}`}
-  enctype={endpoint ? undefined : 'text/plain'}
+  action={`mailto:${site.email}`}
+  enctype="text/plain"
   data-endpoint={endpoint}
+  data-survey={surveyId}
+  data-questions={JSON.stringify(questionIds)}
   data-email={site.email}
   novalidate
 >
@@ -109,10 +114,9 @@ const endpoint = site.formEndpoint;
     </div>
   </div>
 
-  <input type="hidden" name="_subject" value="New enquiry from the website" />
   <div class="trap" aria-hidden="true">
     <label for="f-website">Leave this empty</label>
-    <input id="f-website" name="_gotcha" tabindex="-1" autocomplete="off" />
+    <input id="f-website" name="website" tabindex="-1" autocomplete="off" />
   </div>
 
   <div class="enquiry__submit">
@@ -148,6 +152,8 @@ const endpoint = site.formEndpoint;
   if (form) {
     const email = form.dataset.email ?? '';
     const endpoint = form.dataset.endpoint ?? '';
+    const surveyId = form.dataset.survey ?? '';
+    const questionIds: Record<string, string> = JSON.parse(form.dataset.questions ?? '{}');
     const status = form.querySelector<HTMLElement>('.enquiry__status')!;
     const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
     const hint = form.querySelector<HTMLElement>('#message-hint')!;
@@ -249,10 +255,9 @@ const endpoint = site.formEndpoint;
       const address = String(data.get('email')).trim();
       const type = labels[String(data.get('enquiry_for'))] ?? 'General';
       const subject = `Website enquiry: ${type}, from ${name}`;
-      data.set('_subject', subject);
 
       // Bots fill the hidden field; act as if it worked and send nothing.
-      if (String(data.get('_gotcha') ?? '') !== '') return sent(name, address);
+      if (String(data.get('website') ?? '') !== '') return sent(name, address);
 
       if (!endpoint) {
         const body = `${describe(data)}\n\n${String(data.get('message')).trim()}`;
@@ -261,13 +266,25 @@ const endpoint = site.formEndpoint;
         return;
       }
 
+      // Formbricks keys each answer by its question ID; empty fields are left out.
+      const answers: Record<string, string> = {};
+      for (const [field, questionId] of Object.entries(questionIds)) {
+        const value = field === 'enquiry_for' ? type : String(data.get(field) ?? '').trim();
+        if (value) answers[questionId] = value;
+      }
+
       button.disabled = true;
       button.textContent = 'Sending…';
       try {
         const response = await fetch(endpoint, {
           method: 'POST',
-          body: data,
-          headers: { Accept: 'application/json' },
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            surveyId,
+            finished: true,
+            data: answers,
+            meta: { source: 'website', url: location.href },
+          }),
         });
         if (!response.ok) throw new Error(String(response.status));
         sent(name, address);

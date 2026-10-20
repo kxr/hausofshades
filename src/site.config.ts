@@ -16,11 +16,28 @@ export const site = {
   openingHoursSchema: 'Mo-Su 10:00-21:00',
 
   instagram: 'https://www.instagram.com/hausofshades.saba/',
-  instagramHandle: '@haus_of_shades_studio',
+  instagramHandle: '@hausofshades.saba',
   fresha: 'https://www.fresha.com/a/haus-of-shades-studio-melbourne-13-glass-crescent-ej6u9r1v',
 
-  // Where the enquiry form sends submissions, e.g. a Formspree endpoint
-  // ('https://formspree.io/f/abcdwxyz'). While empty, the form opens the
-  // visitor's email app with the enquiry filled in, addressed to `email`.
-  formEndpoint: '',
+  // Enquiries are saved as responses to a Formbricks survey, through its public
+  // Client API (no API key). Until both IDs are filled in, the form opens the
+  // visitor's email app with the enquiry written out, addressed to `email`.
+  formbricks: {
+    appUrl: 'https://app.formbricks.com', // or your own address if you self-host
+    workspaceId: 'cmvgsq93k230p01ropjc54k2s',
+    surveyId: 'cmvguegu1gsz101qv5jkt960n',
+    // The survey's question ID for each form field. If you give the questions
+    // these IDs in Formbricks, nothing here needs changing.
+    questionIds: {
+      enquiry_for: 'enquiry_for',
+      name: 'name',
+      email: 'email',
+      phone: 'phone',
+      company: 'company',
+      date: 'date',
+      location: 'location',
+      people: 'people',
+      message: 'message',
+    },
+  },
 };
