@@ -102,6 +102,8 @@
 
 /* Base */
 *, *::before, *::after { box-sizing: border-box; }
+/* `hidden` must win over any display set on a component (e.g. a grid form). */
+[hidden] { display: none !important; }
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;

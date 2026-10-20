@@ -240,6 +240,8 @@ const endpoint =
       const panel = document.querySelector<HTMLElement>('.enquiry-sent')!;
       panel.querySelector('.enquiry-sent__copy')!.textContent =
         `Thanks, ${name}. The team will reply to ${address}.`;
+      button.disabled = false;
+      button.textContent = 'Send enquiry';
       form.hidden = true;
       panel.hidden = false;
       panel.focus();
@@ -356,7 +358,6 @@ const endpoint =
     .field--wide { grid-column: 1 / -1; }
   }
   .field { display: grid; gap: 0.4rem; align-content: start; }
-  .field[hidden] { display: none; }
   .field__label { font-weight: 500; }
   .field__optional { font-weight: 400; color: var(--plum-soft); }
   .field input,
@@ -412,6 +413,5 @@ const endpoint =
     background: var(--sand);
     outline: none;
   }
-  .enquiry-sent[hidden] { display: none; }
   .enquiry-sent h2 { font-size: var(--step-4); }
 </style>
