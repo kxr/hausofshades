@@ -46,33 +46,6 @@ const creativeRow = [
     </div>
   </section>
 
-  <section class="band ground-mauve" aria-labelledby="hair-title">
-    <div class="wrap hair">
-      <div class="hair__text">
-        <h2 class="display" id="hair-title">{hair.name}</h2>
-        <p class="lede">{hair.intro}</p>
-        <div class="actions">
-          <a class="btn" href={site.fresha} target="_blank" rel="noopener">
-            Book on Fresha<span class="visually-hidden"> (opens in a new tab)</span>
-          </a>
-          <a class="btn btn--line" href={url('enquire/?for=hair')}>{hair.enquiryLabel}</a>
-        </div>
-        <a class="text-link" href={url('hair/')}>See the Hair Studio</a>
-      </div>
-      <BeforeAfter
-        class="hair__ba"
-        photo={photo('hair/03-smoothing-before-after')}
-        sizes="(min-width: 60em) 44vw, 100vw"
-        caption="Before and after a smoothing treatment"
-      />
-      <div class="hair__row" data-zoom-group>
-        <Photo photo={photo('hair/01-hollywood-waves')} cover sizes="(min-width: 60em) 18vw, 33vw" />
-        <Photo photo={photo('hair/04-blended-highlights')} cover sizes="(min-width: 60em) 18vw, 33vw" />
-        <Photo photo={photo('hair/02-heart-braid-crown')} cover sizes="(min-width: 60em) 18vw, 33vw" />
-      </div>
-    </div>
-  </section>
-
   <section class="band ground-blush" aria-labelledby="beauty-title">
     <div class="wrap beauty">
       <h2 class="display beauty__title" id="beauty-title">{beauty.name}</h2>
@@ -97,6 +70,33 @@ const creativeRow = [
     </ul>
     <div class="wrap">
       <a class="text-link" href={url('beauty/')}>See the Beauty Studio</a>
+    </div>
+  </section>
+
+  <section class="band ground-mauve" aria-labelledby="hair-title">
+    <div class="wrap hair">
+      <div class="hair__text">
+        <h2 class="display" id="hair-title">{hair.name}</h2>
+        <p class="lede">{hair.intro}</p>
+        <div class="actions">
+          <a class="btn" href={site.fresha} target="_blank" rel="noopener">
+            Book on Fresha<span class="visually-hidden"> (opens in a new tab)</span>
+          </a>
+          <a class="btn btn--line" href={url('enquire/?for=hair')}>{hair.enquiryLabel}</a>
+        </div>
+        <a class="text-link" href={url('hair/')}>See the Hair Studio</a>
+      </div>
+      <BeforeAfter
+        class="hair__ba"
+        photo={photo('hair/03-smoothing-before-after')}
+        sizes="(min-width: 60em) 44vw, 100vw"
+        caption="Before and after a smoothing treatment"
+      />
+      <div class="hair__row" data-zoom-group>
+        <Photo photo={photo('hair/01-hollywood-waves')} cover sizes="(min-width: 60em) 18vw, 33vw" />
+        <Photo photo={photo('hair/04-blended-highlights')} cover sizes="(min-width: 60em) 18vw, 33vw" />
+        <Photo photo={photo('hair/02-heart-braid-crown')} cover sizes="(min-width: 60em) 18vw, 33vw" />
+      </div>
     </div>
   </section>
 
