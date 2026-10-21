@@ -5,7 +5,7 @@ export const site = {
 
   phone: '0494 576 823',
   phoneHref: 'tel:+61494576823',
-  email: 'info@hausofshades.com.au',
+  email: 'saba@hausofshades.com.au',
 
   locality: 'Doreen',
   region: 'VIC',
